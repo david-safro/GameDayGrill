@@ -17,6 +17,7 @@
 
 	{#if $page.data.user}
 		<a href="/admin">Admin</a>
+		<a href="/order">Order</a>
 
 		<form class="logout" action="/logout" method="POST" use:enhance>
 			<button type="submit">Log out</button>
