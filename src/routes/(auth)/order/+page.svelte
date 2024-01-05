@@ -1,16 +1,36 @@
-<!-- src/routes/menu/Menu.svelte -->
-
 <script context="module" lang="ts">
 	import jsonData from "../../../menu/menu";
-	console.log("menu:", jsonData); // Log the menu data
+</script>
+<script>
+	import { onMount } from 'svelte';
+	import { writable } from 'svelte/store';
+	import { page } from '$app/stores'
+
+	let listItems = writable([]);
+	let currentListItems;
+
+	listItems.subscribe(value => {
+		currentListItems = value;
+	});
+
+	function handleAddItem(item) {
+		console.log("Adding item:", item);
+		listItems.update(items => [...items, item.name]);
+	}
+
+
+	onMount(() => {
+	});
 </script>
 
 <main>
 	{#if jsonData}
+		<h1>Welcome {$page.data.user.name} your ID is {$page.data.user.id}!</h1>
 		<div class="menu-container">
-			{#each Object.entries(jsonData) as [category, items]}
-				<section>
-					<h2>{category}</h2>
+			<section>
+				<h2>Menu</h2>
+				<div class="tables-container">
+					<!-- Left Table: Menu -->
 					<table>
 						<thead>
 						<tr>
@@ -22,97 +42,116 @@
 						</tr>
 						</thead>
 						<tbody>
-						{#if items && !items.subcategories}
-							{#each Object.entries(items) as [itemName, item]}
-								<tr>
-									<td>{itemName}</td> <!-- Log itemName -->
-									<td>{item.price}</td>
-									<td>{item.description}</td>
-									<td>{item.ingredients ? item.ingredients.join(", ") : 'N/A'}</td>
-									<td><button on:click={() => handleAddItem(item)}>Add</button></td>
-								</tr>
-							{/each}
-						{/if}
-						{#if items && items.subcategories}
-							{#each Object.entries(items.subcategories) as [subcategory, subItems]}
-								<tr>
-									<td colspan="5" class="subcategory">{subcategory}</td>
-								</tr>
-								{#each Object.entries(subItems) as [subItemName, subItem]}
+						{#each Object.entries(jsonData) as [category, items]}
+							<tr>
+								<td colspan="5" class="subcategory">{category}</td>
+							</tr>
+							{#if items && !items.subcategories}
+								{#each Object.entries(items) as [itemName, item]}
 									<tr>
-										<td>{subItemName}</td> <!-- Log subItemName -->
-										<td>{subItem.price}</td>
-										<td>{subItem.description}</td>
-										<td>{subItem.ingredients ? subItem.ingredients.join(", ") : 'N/A'}</td>
-										<td><button on:click={() => handleAddItem(subItem)}>Add</button></td>
+										<td>{item.name}</td>
+										<td>{item.price}</td>
+										<td>{item.description}</td>
+										<td>{item.ingredients ? item.ingredients.join(", ") : 'N/A'}</td>
+										<td><button on:click={() => handleAddItem(item)}>Add</button></td>
 									</tr>
 								{/each}
-							{/each}
-              {/if}
-            </tbody>
-          </table>
-        </section>
-      {/each}
-    </div>
-  {/if}
+							{/if}
+							{#if items && items.subcategories}
+								{#each Object.entries(items.subcategories) as [subcategory, subItems]}
+									<tr>
+										<td colspan="5" class="subcategory">{subcategory}</td>
+									</tr>
+									{#each Object.entries(subItems) as [subItemName, subItem]}
+										<tr>
+											<td>{subItemName}</td>
+											<td>{subItem.price}</td>
+											<td>{subItem.description}</td>
+											<td>{subItem.ingredients ? subItem.ingredients.join(", ") : 'N/A'}</td>
+											<td><button on:click={() => handleAddItem(subItem)}>Add</button></td>
+										</tr>
+									{/each}
+								{/each}
+							{/if}
+						{/each}
+						</tbody>
+					</table>
+
+					<table>
+						<thead>
+						<tr>
+							<th>List Item</th>
+						</tr>
+						</thead>
+						<tbody>
+						{#each $listItems as listItem}
+							<tr key={listItem}>
+								<td>{listItem}</td>
+							</tr>
+						{/each}
+
+						</tbody>
+					</table>
+				</div>
+			</section>
+		</div>
+	{/if}
 </main>
 
 <style>
-  main {
-    display: flex;
-    height: 100vh;
-    background-color: #222;
-    color: #fff;
-  }
+    main {
+        display: flex;
+        height: 100vh;
+        background-color: #222;
+        color: #fff;
+    }
 
-  .menu-container {
-    max-width: 50vw;
-    overflow-y: auto;
-    border-radius: 10px;
-    background-color: #333;
-    padding: 20px;
-    font-family: 'Arial', sans-serif;
-  }
+    .menu-container {
+        max-width: 50vw;
+        overflow-y: auto;
+        border-radius: 10px;
+        background-color: #333;
+        padding: 20px;
+        font-family: 'Arial', sans-serif;
+    }
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-  }
+    .tables-container {
+        display: flex;
+    }
 
-  th, td {
-    border: 1px solid #555;
-    padding: 8px;
-    text-align: left;
-  }
+    table {
+        width: 50%;
+        border-collapse: collapse;
+        margin-top: 10px;
+    }
 
-  th {
-    background-color: #4CAF50;
-    color: white;
-  }
+    th, td {
+        border: 1px solid #555;
+        padding: 8px;
+        text-align: left;
+    }
 
-  .subcategory {
-    font-weight: bold;
-    padding-left: 20px;
-  }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
 
-  button {
-    background-color: #008CBA;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+    .subcategory {
+        font-weight: bold;
+        padding-left: 20px;
+    }
 
-  button:hover {
-    background-color: #00506b;
-  }
+    button {
+        background-color: #008CBA;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #00506b;
+    }
 </style>
 
-<script>
-  function handleAddItem(item) {
-    // Add your logic to handle adding the item
-    console.log("Adding item:", item);
-  }
-</script>
