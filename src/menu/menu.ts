@@ -1,5 +1,3 @@
-// src/menu/menu.ts
-
 export interface MenuItem {
 	name: string;
 	price: number;
