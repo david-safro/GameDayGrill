@@ -15,7 +15,6 @@ export interface Menu {
 
 const jsonData: Menu = {
 	"beverages": {
-
 			"soda": {
 				"name": "Soda",
 				"price": 1.99,
