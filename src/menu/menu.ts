@@ -1,5 +1,3 @@
-// src/menu/menu.ts
-
 export interface MenuItem {
 	name: string;
 	price: number;
@@ -17,7 +15,6 @@ export interface Menu {
 
 const jsonData: Menu = {
 	"beverages": {
-
 			"soda": {
 				"name": "Soda",
 				"price": 1.99,

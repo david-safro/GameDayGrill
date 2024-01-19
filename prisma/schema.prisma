@@ -32,3 +32,10 @@ model Roles {
   name String @unique
   User User[]
 }
+
+model Reservation {
+  reservatorId String @id @default(uuid())
+  timeStart    Int
+  timeEnd      Int
+  name         String
+}

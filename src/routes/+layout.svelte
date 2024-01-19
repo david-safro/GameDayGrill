@@ -16,8 +16,12 @@
 	{/if}
 
 	{#if $page.data.user}
+		<a href="/">Home</a>
 		<a href="/admin">Admin</a>
 		<a href="/order">Order</a>
+		<a href="/checkout">Checkout</a>
+		<a href="/menu">Menu</a>
+
 
 		<form class="logout" action="/logout" method="POST" use:enhance>
 			<button type="submit">Log out</button>
