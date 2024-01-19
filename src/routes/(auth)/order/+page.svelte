@@ -1,10 +1,13 @@
 <script context="module" lang="ts">
 	import jsonData from "../../../menu/menu";
+
 </script>
 <script>
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
-	import { page } from '$app/stores'
+	import { page } from '$app/stores';
+	import { getMenuItemByName } from '../../../menu/menu';
+	import { updateOrder } from './+page.server.js'
 
 	let listItems = writable([]);
 	let currentListItems;
@@ -18,9 +21,26 @@
 		listItems.update(items => [...items, item.name]);
 	}
 
+	function handleSaveChanges() {
+		const orderedItemsString = listItems.join(' '); // Convert array to string
+		updateOrder($page.data.user.id, orderedItemsString);
+		console.log("Changes saved!");
+	}
 
 	onMount(() => {
+		const orders = $page.data.user.orders.orderedItems;
+		console.log(orders)
+		if (typeof orders === 'string' && orders.trim() !== '') {
+			const orderedItemNames = orders.split(' ');
+			orderedItemNames.forEach(itemName => {
+				const menuItem = getMenuItemByName(itemName);
+				if (menuItem) {
+					handleAddItem(menuItem);
+				}
+			});
+		}
 	});
+
 </script>
 
 <main>
@@ -30,7 +50,6 @@
 			<section>
 				<h2>Menu</h2>
 				<div class="tables-container">
-					<!-- Left Table: Menu -->
 					<table>
 						<thead>
 						<tr>

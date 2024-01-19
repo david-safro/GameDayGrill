@@ -119,4 +119,15 @@ const jsonData: Menu = {
 export function getMenu() {
 	return jsonData;
 }
+
+export function getMenuItemByName(itemName: string): MenuItem | undefined {
+	for (const category in jsonData) {
+		const menuCategory = jsonData[category];
+		if (itemName.toLowerCase() in menuCategory) {
+			return menuCategory[itemName.toLowerCase()];
+		}
+	}
+	return undefined;
+}
+
 export default jsonData;
