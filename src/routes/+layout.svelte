@@ -21,6 +21,7 @@
 		<a href="/order">Order</a>
 		<a href="/checkout">Checkout</a>
 		<a href="/menu">Menu</a>
+		<a href="/reservation">Reservation</a>
 
 
 		<form class="logout" action="/logout" method="POST" use:enhance>

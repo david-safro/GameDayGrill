@@ -1,52 +1,50 @@
-// Import necessary modules and dependencies
-import { json, ServerFunction } from '@sveltejs/kit/node';
+import { json } from '@sveltejs/kit';
 import { PrismaClient } from '@prisma/client';
 
-// Create an instance of PrismaClient
 const prisma = new PrismaClient();
 
-// Define the API endpoint for updating the user's order
-export const post: ServerFunction = async (request) => {
+export async function POST(event) {
 	try {
-		// Extract data from the request body
-		const { userId, itemName } = json(request.body);
+		const data = await event.request.formData();
+		const listItems = data.getAll('listItem');
+		const userId = data.get('userId');
 
-		// Retrieve the user by userId
 		const user = await prisma.user.findUnique({
 			where: { id: userId },
 			include: { orders: true },
 		});
 
 		if (!user) {
-			return {
-				status: 404,
-				body: { message: 'User not found' },
-			};
+			throw new Error('User not found');
 		}
 
-		// Get the user's current order or create a new one
-		const order = user.orders[0] || await prisma.order.create({
-			data: { userId: user.id },
-		});
+		const existingOrder = user.orders.find(order => order.userId === userId);
 
-		// Update the orderedItems field in the order
-		await prisma.order.update({
-			where: { userId: user.id },
-			data: { orderedItems: order.orderedItems ? `${order.orderedItems}, ${itemName}` : itemName },
-		});
+		if (existingOrder) {
+			await prisma.order.update({
+				where: { userId: existingOrder.userId },
+				data: {
+					orderedItems: listItems.join(', '),
+				},
+			});
 
-		return {
-			status: 200,
-			body: { message: 'Order updated successfully' },
-		};
+			console.log('Updated order for user:', user);
+		} else {
+			throw new Error('Existing order not found');
+		}
+
+		return new Response(JSON.stringify({ message: 'Order updated successfully' }), {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
 	} catch (error) {
-		console.error('Error updating order:', error);
-		return {
-			status: 500,
-			body: { message: 'Internal server error' },
-		};
-	} finally {
-		// Close the Prisma client connection
-		await prisma.$disconnect();
+		console.error('Failed to update order:', error);
+		return new Response(JSON.stringify({ error: 'Failed to update order' }), {
+			status: 500, // Internal Server Error
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
 	}
-};
+}

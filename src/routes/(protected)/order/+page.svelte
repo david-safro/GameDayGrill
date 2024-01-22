@@ -4,8 +4,8 @@
 <script>
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
-	import { page } from '$app/stores'
-
+	import { page } from '$app/stores';
+	export let data
 	let listItems = writable([]);
 	let currentListItems;
 
@@ -13,16 +13,33 @@
 		currentListItems = value;
 	});
 
-	function handleAddItem(item) {
-		console.log("Adding item:", item);
-		listItems.update(items => [...items, item.name]);
+	// Function to update the server with the new order
+	async function updateServerOrder(newList, userId) {
+		try {
+			const formData = new FormData();
+			newList.forEach(item => {
+				formData.append('listItem', item);
+			});
+			formData.append('userId', userId);
+
+			await fetch('../../api/update-order', {
+				method: 'POST',
+				body: formData,
+			});
+		} catch (error) {
+			console.error('Failed to update server order:', error);
+		}
 	}
 
+	function handleAddItem(item) {
+		console.log('Adding item:', item);
+		listItems.update(items => [...items, item.name]);
 
-	onMount(() => {
-	});
+		// Update the server with the new order
+		updateServerOrder(currentListItems, $page.data.user.id);
+	}
+
 </script>
-
 <main>
 	{#if jsonData}
 		<h1>Welcome {$page.data.user.name} your ID is {$page.data.user.id}!</h1>
@@ -77,21 +94,16 @@
 						</tbody>
 					</table>
 
-					<table>
-						<thead>
-						<tr>
-							<th>List Item</th>
-						</tr>
-						</thead>
-						<tbody>
-						{#each $listItems as listItem}
-							<tr key={listItem}>
-								<td>{listItem}</td>
-							</tr>
-						{/each}
-
-						</tbody>
-					</table>
+					<h1>Current Ordered Items:</h1>
+					{#if $listItems.length > 0}
+						<ul>
+							{#each $listItems as listItem}
+								<li>{listItem}</li>
+							{/each}
+						</ul>
+					{:else}
+						<p>No ordered items</p>
+					{/if}
 				</div>
 			</section>
 		</div>
