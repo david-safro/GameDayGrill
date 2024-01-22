@@ -4,7 +4,7 @@
 <script>
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
-	import { page } from '$app/stores'
+	import { page } from '$app/stores';
 
 	let listItems = writable([]);
 	let currentListItems;
@@ -13,16 +13,23 @@
 		currentListItems = value;
 	});
 
-	function handleAddItem(item) {
+	async function handleAddItem(item) {
 		console.log("Adding item:", item);
+
+		// Update local listItems store
 		listItems.update(items => [...items, item.name]);
+
+		// Update user's update-order on the server
+
 	}
 
-
 	onMount(() => {
+		if ($page.data.user.orders) {
+			const orderedItems = $page.data.user.orders.flatMap(order => order.split(','));
+			listItems.set(orderedItems);
+		}
 	});
 </script>
-
 <main>
 	{#if jsonData}
 		<h1>Welcome {$page.data.user.name} your ID is {$page.data.user.id}!</h1>
