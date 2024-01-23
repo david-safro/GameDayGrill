@@ -5,7 +5,8 @@
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { page } from '$app/stores';
-	export let data
+	export let data;
+	console.log(data.name)
 	let listItems = writable([]);
 	let currentListItems;
 
@@ -13,7 +14,6 @@
 		currentListItems = value;
 	});
 
-	// Function to update the server with the new order
 	async function updateServerOrder(newList, userId) {
 		try {
 			const formData = new FormData();
