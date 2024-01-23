@@ -1,14 +1,18 @@
 <script context="module" lang="ts">
-	import jsonData from "../../../menu/menu";
+	import jsonData from "../../../../menu/menu";
 </script>
+
 <script>
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { page } from '$app/stores';
+
+	let { id } = $page.params;
 	export let data;
-	console.log(data.name)
-	let listItems = writable([]);
-	let currentListItems;
+	console.log(data.current_order);
+
+	let listItems = writable(data.current_order);
+	let currentListItems = data.current_order;
 
 	listItems.subscribe(value => {
 		currentListItems = value;
@@ -39,7 +43,16 @@
 		updateServerOrder(currentListItems, $page.data.user.id);
 	}
 
+	function handleRemoveItem(index) {
+		listItems.update(items => {
+			const newList = [...items];
+			newList.splice(index, 1);
+			updateServerOrder(newList, $page.data.user.id);
+			return newList;
+		});
+	}
 </script>
+
 <main>
 	{#if jsonData}
 		<h1>Welcome {$page.data.user.name} your ID is {$page.data.user.id}!</h1>
@@ -61,7 +74,7 @@
 						<tbody>
 						{#each Object.entries(jsonData) as [category, items]}
 							<tr>
-								<td colspan="5" class="subcategory">{category}</td>
+								<td colspan="6" class="subcategory">{category}</td>
 							</tr>
 							{#if items && !items.subcategories}
 								{#each Object.entries(items) as [itemName, item]}
@@ -77,7 +90,7 @@
 							{#if items && items.subcategories}
 								{#each Object.entries(items.subcategories) as [subcategory, subItems]}
 									<tr>
-										<td colspan="5" class="subcategory">{subcategory}</td>
+										<td colspan="6" class="subcategory">{subcategory}</td>
 									</tr>
 									{#each Object.entries(subItems) as [subItemName, subItem]}
 										<tr>
@@ -93,20 +106,31 @@
 						{/each}
 						</tbody>
 					</table>
-
-					<h1>Current Ordered Items:</h1>
-					{#if $listItems.length > 0}
-						<ul>
-							{#each $listItems as listItem}
-								<li>{listItem}</li>
-							{/each}
-						</ul>
-					{:else}
-						<p>No ordered items</p>
-					{/if}
 				</div>
 			</section>
 		</div>
+
+		<h1>Current Ordered Items:</h1>
+		{#if $listItems.length > 0}
+			<table>
+				<thead>
+				<tr>
+					<th>Name</th>
+					<th>Remove</th>
+				</tr>
+				</thead>
+				<tbody>
+				{#each $listItems as listItem, index}
+					<tr>
+						<td>{listItem}</td>
+						<td><button on:click={() => handleRemoveItem(index)}>Remove</button></td>
+					</tr>
+				{/each}
+				</tbody>
+			</table>
+		{:else}
+			<p>No ordered items</p>
+		{/if}
 	{/if}
 </main>
 
@@ -166,4 +190,3 @@
         background-color: #00506b;
     }
 </style>
-

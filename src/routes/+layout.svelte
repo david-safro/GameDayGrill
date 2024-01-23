@@ -18,7 +18,7 @@
 	{#if $page.data.user}
 		<a href="/">Home</a>
 		<a href="/admin">Admin</a>
-		<a href="/order">Order</a>
+		<a href="/order/{$page.data.user.id}">Order</a>
 		<a href="/checkout">Checkout</a>
 		<a href="/menu">Menu</a>
 		<a href="/reservation">Reservation</a>
