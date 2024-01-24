@@ -9,13 +9,18 @@
 
 	let { id } = $page.params;
 	export let data;
-	console.log(data.current_order);
 
-	let listItems = writable(data.current_order);
+	// Ensure current_order is always an array
+	let listItems = writable(data.current_order[0].split(','));
 	let currentListItems = data.current_order;
 
 	listItems.subscribe(value => {
-		currentListItems = value;
+		if (Array.isArray(value)) {
+			currentListItems = value.join(', ');
+		} else {
+			// Handle the case where value is not an array
+			console.error('Expected an array, but received:', value);
+		}
 	});
 
 	async function updateServerOrder(newList, userId) {
@@ -40,7 +45,7 @@
 		listItems.update(items => [...items, item.name]);
 
 		// Update the server with the new order
-		updateServerOrder(currentListItems, $page.data.user.id);
+		updateServerOrder(currentListItems.split(',').map(item => item.trim()), $page.data.user.id);
 	}
 
 	function handleRemoveItem(index) {
@@ -74,7 +79,7 @@
 						<tbody>
 						{#each Object.entries(jsonData) as [category, items]}
 							<tr>
-								<td colspan="6" class="subcategory">{category}</td>
+								<td colspan="5" class="subcategory">{category}</td>
 							</tr>
 							{#if items && !items.subcategories}
 								{#each Object.entries(items) as [itemName, item]}
@@ -90,7 +95,7 @@
 							{#if items && items.subcategories}
 								{#each Object.entries(items.subcategories) as [subcategory, subItems]}
 									<tr>
-										<td colspan="6" class="subcategory">{subcategory}</td>
+										<td colspan="5" class="subcategory">{subcategory}</td>
 									</tr>
 									{#each Object.entries(subItems) as [subItemName, subItem]}
 										<tr>
@@ -110,27 +115,41 @@
 			</section>
 		</div>
 
-		<h1>Current Ordered Items:</h1>
-		{#if $listItems.length > 0}
-			<table>
-				<thead>
-				<tr>
-					<th>Name</th>
-					<th>Remove</th>
-				</tr>
-				</thead>
-				<tbody>
-				{#each $listItems as listItem, index}
+		<div class="order-container">
+			<h1>Current Ordered Items:</h1>
+			{#if $listItems.length > 0}
+				<table>
+					<thead>
 					<tr>
-						<td>{listItem}</td>
-						<td><button on:click={() => handleRemoveItem(index)}>Remove</button></td>
+						<th>Name</th>
+						<th>Remove</th>
+						<th>Quantity</th>
 					</tr>
-				{/each}
-				</tbody>
-			</table>
-		{:else}
-			<p>No ordered items</p>
-		{/if}
+					</thead>
+					<tbody>
+					{#each $listItems as listItem, index}
+						<tr>
+							<td>{listItem}</td>
+							<td><button on:click={() => handleRemoveItem(index)}>Remove</button></td>
+							<td>
+								<select>
+									{#each Array.from({ length: 9 }, (_, i) => i + 1) as option}
+										<option value={option}>{option}</option>
+									{/each}
+								</select>
+							</td>
+						</tr>
+					{/each}
+					</tbody>
+				</table>
+				<div class="subtotal-container">
+					<label>Subtotal:</label>
+					<span class="subtotal-placeholder">$100.00</span>
+				</div>
+			{:else}
+				<p>No ordered items</p>
+			{/if}
+		</div>
 	{/if}
 </main>
 
@@ -156,7 +175,7 @@
     }
 
     table {
-        width: 50%;
+        width: 100%;
         border-collapse: collapse;
         margin-top: 10px;
     }
@@ -188,5 +207,28 @@
 
     button:hover {
         background-color: #00506b;
+    }
+
+    .order-container {
+        flex: 1;
+        padding: 20px;
+    }
+
+    .subtotal-container {
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    label {
+        margin-right: 10px;
+    }
+
+    select {
+        margin-right: 10px;
+    }
+
+    .subtotal-placeholder {
+        font-weight: bold;
     }
 </style>
