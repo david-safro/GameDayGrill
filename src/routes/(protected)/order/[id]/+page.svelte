@@ -6,7 +6,7 @@
 	import { onMount } from 'svelte';
 	import { writable } from 'svelte/store';
 	import { page } from '$app/stores';
-
+	import { goto } from '$app/navigation';
 	let { id } = $page.params;
 	export let data;
 
@@ -55,6 +55,10 @@
 			updateServerOrder(newList, $page.data.user.id);
 			return newList;
 		});
+	}
+
+	function goToCheckout() {
+		goto(`/checkout/${$page.data.user.id}`);
 	}
 </script>
 
@@ -146,6 +150,7 @@
 					<label>Subtotal:</label>
 					<span class="subtotal-placeholder">$100.00</span>
 				</div>
+				<button on:click={goToCheckout}>Go to Checkout</button>
 			{:else}
 				<p>No ordered items</p>
 			{/if}
@@ -203,6 +208,7 @@
         padding: 5px 10px;
         border-radius: 5px;
         cursor: pointer;
+        margin-top: 10px;
     }
 
     button:hover {
