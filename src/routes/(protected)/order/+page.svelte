@@ -60,14 +60,10 @@
 <OrderMenu></OrderMenu>
 <div id="right">
 	<section>
-		<form>
-			<label for="location">Location</label>
-			<input type="text" id="location" name="location"/>
-		</form>
 		<span id="price">Total: ${price}</span>
 		<br>
 		<form method="post" action={`/checkout`}>
-			<input name="menuData" id="menuData" bind:value={menuData}/>
+			<input name="menuData" id="menuData" bind:value={menuData} hidden={true}/>
 			<button type="submit" class="btn-2">Order</button>
 			<button type="button" class="btn-2" on:click={sendOrder}>Send Order</button>
 		</form>
