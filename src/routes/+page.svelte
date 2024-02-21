@@ -24,16 +24,16 @@
         <div class="drk-bdr first">
             <img src="/img/deal1.png"/>
             <div>
-                <h3>Menu Deal</h3>
-                <p>Get the new menu dEal!</p>
+                <h3>Burger Meal</h3>
+                <p>Ultimate burger and drink for only $12.99!</p>
                 <button class="btn-1">Order</button>
             </div>
         </div>
         <div class="drk-bdr second">
             <img src="/img/deal2.png"/>
             <div>
-                <h3>Menu Deal</h3>
-                <p>Get the new menu dEal!</p>
+                <h3>Cheap Meals</h3>
+                <p>Only now - get free drink when ordering any entree over $9.99!</p>
                 <button class="btn-1">Order</button>
             </div>
         </div>
