@@ -1,0 +1,8 @@
+#main-area > div {
+    border-radius: 25px;
+    background-color: var(--light);
+    width: calc(100% - 300px);
+    margin-left: 150px;
+    margin-top: 50px;
+    padding: 20px;
+}

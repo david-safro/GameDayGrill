@@ -1,0 +1,90 @@
+.topbar {
+    width: 100%;
+}
+
+.topbar > div {
+    position: relative;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.25);
+    height: 80px;
+    background-color: var(--bg);
+    display: flex;
+    z-index: 2;
+}
+
+.topbar > div > img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    height: 70%;
+}
+
+.topbar > div > div {
+    position: absolute;
+    right: 40px;
+    display: flex;
+    justify-content: space-between;
+    width: 340px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.topbar > div > div > button {
+    width: 150px;
+    height: 45px;
+    font-size: 15px;
+    font-weight: 600 !important;
+}
+
+.topbar > nav {
+    font-weight: 600;
+    font-size: 18px;
+    height: 40px;
+    background-color: var(--light);
+    border-radius: 0 0 25px 25px;
+    width: calc(100% - 100px);
+    padding-inline: 50px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.topbar > nav > a {
+    padding-inline: 20px;
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    text-decoration: none !important;
+}
+
+.topbar > nav > a:after {
+    position: absolute;
+    content: '';
+    background-color: var(--text);
+    height: 3px;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    opacity: 0;
+    transition: 0.1s opacity ease-in;
+}
+
+.topbar > nav > a.visiting > span {
+    color: var(--secondary);
+}
+
+.topbar > nav > a.visiting:after {
+    color: var(--secondary);
+    opacity: 1;
+    background-color: var(--secondary);
+}
+
+.topbar > nav > a:hover:after {
+    opacity: 1;
+}
+
+.topbar > nav > a > span {
+    color: var(--text);
+    margin: auto;
+}
