@@ -9,7 +9,7 @@ main {
 .order-menu {
     border-radius: 25px;
     background-color: var(--light);
-    width: 800px;
+    width: 600px;
     margin-left: 50px;
     margin-top: 50px;
     padding: 20px;
@@ -42,7 +42,7 @@ main {
 .cart {
     border-radius: 25px;
     background-color: var(--light);
-    width: 800px;
+    width: 600px;
     margin-left: 50px;
     margin-top: 50px;
     padding: 20px;
