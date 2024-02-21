@@ -8,10 +8,17 @@
 <header class="topbar">
     <div>
         <img src="/img/logo.png"/>
+        {#if $page.data.user == null}
         <div>
             <button on:click={() => {document.location.href = "/login"}} class="btn-3">Login</button>
-            <button on:click={() => {document.location.href = "/signup"}} class="btn-2">Sign Up</button>
+            <button on:click={() => {document.location.href = "/register"}} class="btn-2">Sign Up</button>
         </div>
+        {:else}
+        <span>Loggedsin</span>
+        <form class="logout" action="/logout" method="POST">
+			<button type="submit">Log out</button>
+		</form>
+        {/if}
     </div>
     <nav>
         <a on:click={() => {document.location.href = "/"}} class={route == "/" ? "visiting" : ""}><span>Home</span></a>

@@ -4,6 +4,7 @@
         <img src="/img/headerimg.png"/>
         <p>Experience our one-of-a-kind international cuisine,
             exceptional service, and full service bar this game day.
+			Located at 3301 Lancaster Pike Ste 31/J, Wilmington, DE 19805
             <br><br>
             Ready? Place a reservation or an order to start
             your unique Game Day Experience.</p>

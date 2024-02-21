@@ -25,7 +25,7 @@
 		</form>
 		<span id="price">Total: ${price}</span>
 		<br>
-		<form method="post" action="/{$page.data.user.id}">
+		<form method="post" action="/order/{$page.data.user.id}">
 		  <input name="menuData" id="menuData" bind:value={menuData}/>
 		  <button type="submit" class="btn-2">Order</button>
 		  </form>
