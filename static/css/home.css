@@ -39,6 +39,7 @@
     width: 45%;
     height: 100%;
     position: relative;
+    overflow: hidden;
 }
 
 #s1 > .right > div {
@@ -55,7 +56,6 @@
     right: 0;
     top: -25px;
     height: calc(100% + 50px);
-    width: 100%;
     z-index: -1;
 }
 
@@ -77,7 +77,7 @@
     margin-top: 125px;
     display: flex;
     justify-content: space-between;
-    width: 70%;
+    width: 80%;
     height: 200px;
     margin-inline: auto;
 }
@@ -91,7 +91,18 @@
 }
 
 #s2 > div > .first {
-    width: 800px;
+    width: 700px;
+}
+
+#s2 > div > div > img {
+    border-radius: 10px 10px 0px 0px;
+    height: 70%;
+    width: 100%;
+    object-fit: cover;
+    position: absolute;
+    left: 50%;
+    bottom: 30%;
+    transform: translateX(-50%);
 }
 
 #s2 > div > .second {
@@ -142,15 +153,8 @@
     position: relative;
 }
 
-#s3 > form > input {
-    border-radius: 10px;
-    border: none;
-    width: 100%;
-    height: 100%;
-}
-
-#s3 > form > button {
-    height: 100%;
+#s3 > span {
+    
 }
 
 
