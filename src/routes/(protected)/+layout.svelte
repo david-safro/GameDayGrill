@@ -1,13 +1,15 @@
 <script>
-    import { page } from "$app/stores";
-	import { redirect } from "@sveltejs/kit"
-    import { onMount } from "svelte";
+    
+    import { goto } from '$app/navigation';
+	import { page } from '$app/stores'
   
-    onMount(() => {
-      if ($page.data.user == null) {
-        document.location.href = "/login";
-      }
-    });
+    // Check if user data is defined
+    $: user = $page.data.user;
+  
+    // Redirect to /login if user data is not defined
+    if (!$page.data.user) {
+      goto('/login');
+    }
   </script>
   
   <slot />
