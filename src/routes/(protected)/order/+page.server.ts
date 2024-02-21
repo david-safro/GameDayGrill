@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ params }) => {
 
 		return {
 			current_order: userOrders.map(order => order.orderedItems),
-		};
+		}
 	} catch (error) {
 		return {
 			status: 500,

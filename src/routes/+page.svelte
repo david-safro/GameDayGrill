@@ -22,7 +22,7 @@
     <h2>Check Out Our Game Day Deals</h2>
     <div>
         <div class="drk-bdr first">
-            <img />
+            <img src="/img/deal1.png"/>
             <div>
                 <h3>Menu Deal</h3>
                 <p>Get the new menu dEal!</p>
@@ -41,8 +41,5 @@
 </section>
 <section id="s3">
     <h2>Contact Us!</h2>
-    <form>
-        <input placeholder="Send us a message!" type="text"/>
-        <button>Send</button>
-    </form>
+    <span>Contact us at gamedaygrillde@gmail.com</span>
 </section>
