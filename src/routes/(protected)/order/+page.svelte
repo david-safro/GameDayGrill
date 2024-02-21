@@ -24,13 +24,6 @@
 
     // Calculate the total price based on the updated menuData
     price = menuData.reduce((partialSum: number, item: any) => partialSum + item.price, 0).toFixed(2);
-
-    const cart = document.getElementsByClassName("cart")[0];
-    document.addEventListener("click", () => {
-      const parsedData = JSON.parse(cart.getAttribute("data-ordered")!) || [];
-      menuData = Array.isArray(parsedData) ? parsedData : [parsedData];
-      price = menuData.reduce((partialSum: number, i: any) => partialSum + i.price, 0).toFixed(2);
-    });
   });
 
   // Function to find a food item in the menu by name
@@ -67,6 +60,14 @@
       <label for="location">Location</label>
       <input type="text" id="location" name="location"/>
     </form>
+    <div id="selected-items">
+      {#each menuData as item (item.id)}
+        <div class="selected-item">
+          <span>{item.name}</span>
+          <span>${item.price.toFixed(2)}</span>
+        </div>
+      {/each}
+    </div>
     <span id="price">Total: ${price}</span>
     <br>
     <form method="post" action={`/checkout`}>
