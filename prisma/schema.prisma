@@ -35,13 +35,12 @@ model Roles {
 }
 
 model Reservation {
-  id            String   @id @default(uuid())
-  timeStart     DateTime // Use DateTime to represent the start time
-  timeEnd       DateTime // Use DateTime to represent the end time
-  durationHours Int // To store the duration in hours
-  tableNumber   Int // To store the table number
-  userId        String // Reference to the User making the reservation
-  user          User     @relation(fields: [userId], references: [id])
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id             String   @id @default(uuid())
+  name           String
+  numberOfPeople Int
+  selectedDate   DateTime
+  duration       Int
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  createdAt      DateTime @default(now())
 }

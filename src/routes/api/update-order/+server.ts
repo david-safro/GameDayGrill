@@ -1,50 +1,41 @@
-import { json } from '@sveltejs/kit';
+import { json, type RequestHandler } from '@sveltejs/kit';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function POST(event) {
+export const POST: RequestHandler = async ({ request }) => {
 	try {
-		const data = await event.request.formData();
-		const listItems = data.getAll('listItem');
-		const userId = data.get('userId');
+		const { userId, menuData } = await request.json();
 
+		// Fetch the user
 		const user = await prisma.user.findUnique({
 			where: { id: userId },
 			include: { orders: true },
 		});
 
 		if (!user) {
-			throw new Error('User not found');
+			return json({ error: 'User not found' }, 404);
 		}
 
-		const existingOrder = user.orders.find(order => order.userId === userId);
+		// Combine names from the array of JSONs into a single string separated by commas
+		const orderedItems = menuData.map((item: any) => item.name).join(', ');
 
-		if (existingOrder) {
-			await prisma.order.update({
-				where: { userId: existingOrder.userId },
-				data: {
-					orderedItems: listItems.join(', '),
-				},
-			});
-
-			console.log('Updated order for user:', user);
-		} else {
-			throw new Error('Existing order not found');
-		}
-
-		return new Response(JSON.stringify({ message: 'Order updated successfully' }), {
-			headers: {
-				'Content-Type': 'application/json',
-			},
+		// Update or create the user's order
+		await prisma.order.upsert({
+			where: { userId },
+			update: { orderedItems },
+			create: { userId, orderedItems },
 		});
+
+		console.log(`User ${userId}'s order updated successfully with items: ${orderedItems}`);
+
+		// Process the order or perform any necessary actions
+
+		return json({ status: 'Order received and user updated successfully!' });
 	} catch (error) {
-		console.error('Failed to update order:', error);
-		return new Response(JSON.stringify({ error: 'Failed to update order' }), {
-			status: 500, // Internal Server Error
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
+		console.error('Error processing order:', error);
+		return json({ error: 'Invalid request payload' }, 400);
+	} finally {
+		await prisma.$disconnect(); // Close the Prisma client connection
 	}
-}
+};

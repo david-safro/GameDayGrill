@@ -23,8 +23,7 @@
     <nav>
         <a on:click={() => {document.location.href = "/"}} class={route == "/" ? "visiting" : ""}><span>Home</span></a>
         <a on:click={() => {document.location.href = "/menu"}} class={route == "/menu" ? "visiting" : ""}><span>Menu</span></a>
-        <a on:click={() => {document.location.href = "/pickup"}} class={route == "/pickup" ? "visiting" : ""}><span>Pickup</span></a>
-        <a on:click={() => {document.location.href = "/delivery"}} class={route == "/delivery" ? "visiting" : ""}><span>Delivery</span></a>
+        <a on:click={() => {document.location.href = "/order"}} class={route == "/order" ? "visiting" : ""}><span>Order</span></a>
         <a on:click={() => {document.location.href = "/reserve"}} class={route == "/reserve" ? "visiting" : ""}><span>Reserve</span></a>
     </nav>
 </header>
