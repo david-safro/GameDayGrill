@@ -6,8 +6,8 @@
   interface MenuItem {
     name: string;
     price: number;
-    desc: string;
-    info: number;
+    description: string;
+    ingredients: string[];
   };
 
   export let cartItems: Array<MenuItem> = [];
@@ -31,7 +31,7 @@
       {#each items as item}
         <li class="drk-bdr">
           <h3>{item.name}</h3>
-          <p>{item.desc}</p>
+          <p>{item.description}<br>{item.ingredients}</p>
           <span>${item.price}</span>
           {#if order}
             <button on:click={() => addToCart(item)} class="btn-2">Add</button>
